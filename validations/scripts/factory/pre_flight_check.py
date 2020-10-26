@@ -16,8 +16,6 @@
 #
 
 import logging
-import os
-import sys
 from scripts.utils.hardware import HardwareValidations
 from scripts.utils.storage import StorageValidations
 from messages.user_messages import *

@@ -21,6 +21,7 @@ from scripts.factory.pre_flight_check import PreFlightValidationsCall
 from scripts.factory.cluster_readiness_check import ClusterValidationsCall
 from scripts.factory.cortx_check import CortxValidationsCall
 from scripts.factory.unboxing_readiness_check import UnboxingValidationsCall
+from scripts.factory.bmc_checks import BMCValidations
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +39,10 @@ class Validators():
             check_list = config.REPLACE_NODE_CHECK
         elif args.fwupdate:
             check_list = config.FW_UPDATE_CHECK
-        elif args.unboxing:
-            check_list = config.UNBOXING_CHECK
+        elif args.preunboxing:
+            check_list = config.UNBOXING_PRE_CHECK
+        elif args.postunboxing:
+            check_list = config.UNBOXING_POST_CHECK
         elif args.c:
             check_list = {args.c: config.ALL_CHECKS[args.c]}
         else:
@@ -63,9 +66,9 @@ class Validators():
 if __name__ == '__main__':
     import argparse
     import sys
-    #from scripts.utils.log import setup_logging
+    from scripts.utils.log import setup_logging
 
-    #setup_logging()
+    setup_logging()
 
     argParser = argparse.ArgumentParser()
     argParser.add_argument(
@@ -81,8 +84,11 @@ if __name__ == '__main__':
               "--fwupdate", action='store_true',
               help="Firmware update check validation")
     argParser.add_argument(
-              "--unboxing", action='store_true',
-              help="Unboxing check validation")
+              "--preunboxing", action='store_true',
+              help="Unboxing pre-check validation")
+    argParser.add_argument(
+              "--postunboxing", action='store_true',
+              help="Unboxing post-check validation")
     argParser.add_argument(
               "-c", type=str, choices=config.ALL_CHECKS.keys(),
               help="Name of validation to check")

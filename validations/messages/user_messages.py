@@ -35,10 +35,13 @@ VOLUMES_MAPPED_TO_CNTRLRS_CHECK = "volumes_mapped CHECK: Enclosure Volumes Are M
 VOLUMES_MAPPED_TO_CNTRLRS_ERROR = "volumes_mapped ERROR: Enclosure Volumes Not Mapped to Controllers. Run rescan_scsi_bus.sh file"
 
 # BMC Accessible
-BMC_ACCESSIBLE_CHECK = "check_bmc_accessible CHECK: BMC Is Accessible On Both Servers"
-BMC_ACCESSIBLE_ERROR = "check_bmc_accessible ERROR: BMC Is Inaccessible On Servers. Please Check."
-PING_BMC_IP_CHECK = "ping_bmc CHECK: BMC IP Ping Success"
-PING_BMC_IP_ERROR = "ping_bmc ERROR: BMC IP Not Reachable"
+BMC_POWER_GET_ERROR = "verify_bmc_power_status ERROR: Unable to get BMC power status"
+BMC_POWER_ERROR = "verify_bmc_power_status ERROR: BMC Power Failure"
+BMC_POWER_CHECK = "verify_bmc_power_status CHECK: BMC Power Status is 'on'"
+BMC_ACCESSIBLE_CHECK = "verify_bmc_accessible CHECK: BMC Is Accessible On Both Servers"
+BMC_ACCESSIBLE_ERROR = "verify_bmc_accessible ERROR: BMC Is Inaccessible On Servers. Please Check."
+BMC_PING_IP_CHECK = "ping_bmc CHECK: BMC IP Ping Success"
+BMC_PING_IP_ERROR = "ping_bmc ERROR: BMC IP Not Reachable"
 BMC_IP_ERROR = "ping_bmc ERROR: Failed to get BMC IP."
 
 # Nodes Status
@@ -73,6 +76,7 @@ CLUSTER_IP_CHECK = "Cluster IP is Set in Pillars"
 CLUSTER_IP_ERROR = "Cluster IP is Not Set in Pillars"
 
 # Remote Execution messages
-SSH_CONN_ERROR = "ssh_remote_machine ERROR: SSH Conection Failed to Establish"
+SSH_CONN_ERROR = "ssh_remote_machine ERROR: SSH Connection Failed to Establish"
+SSH_CONN_EXCEPTION = "ERROR: Exception issuing command on {} -- {}"
 DECRYPT_PASSWD_CMD_ERROR = "decrypt_secret ERROR: salt-call: command not found"
 DECRYPT_PASSWD_FAILED = "decrypt_secret ERROR: Failed to decrypt Secret"

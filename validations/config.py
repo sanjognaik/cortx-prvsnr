@@ -16,7 +16,7 @@ FACTORY_POST_CHECK = {
     'check_get_resource_failcount': 'ClusterValidationsCall',
     'check_cluster_status': 'ClusterValidationsCall',
     'check_stonith_issues': 'ClusterValidationsCall',
-    'check_bmc_accessible': 'ClusterValidationsCall',
+    'verify_bmc_accessible': 'BMCValidations',
     'check_consul_service': 'CortxValidationsCall',
     'check_elasticsearch_service': 'CortxValidationsCall',
     'check_ioservice_service': 'CortxValidationsCall',
@@ -39,10 +39,13 @@ REPLACE_NODE_CHECK = {
 FW_UPDATE_CHECK = {
 }
 
-UNBOXING_CHECK = {
+UNBOXING_PRE_CHECK = {
     'check_stonith_issues': 'UnboxingValidationsCall',
-    'check_bmc_accessible': 'UnboxingValidationsCall',
+    'verify_bmc_accessible': 'BMCValidations',
     'check_controller_mc_accessible': 'UnboxingValidationsCall'
+}
+
+UNBOXING_POST_CHECK = {
 }
 
 ALL_CHECKS = {
@@ -53,5 +56,6 @@ for check in (
             FACTORY_PRE_CHECK,
             REPLACE_NODE_CHECK,
             FW_UPDATE_CHECK,
-            UNBOXING_CHECK ):
+            UNBOXING_PRE_CHECK,
+            UNBOXING_POST_CHECK ):
     ALL_CHECKS.update(check)

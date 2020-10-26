@@ -54,35 +54,39 @@ def run_subprocess_cmd(cmd, **kwargs):
     return result
 
 
-def ssh_remote_machine(hostname, username, password, port=None):
-    cmd = "pip3 install paramiko"
-    self.run_subprocess_cmd(cmd)
-    time.sleep(5)
+def ssh_remote_machine(hostname, username=None, password=None, port=22):
+    # cmd = "pip3 install paramiko"
+    # run_subprocess_cmd(cmd)
+    # time.sleep(5)
     ssh_client = paramiko.client.SSHClient()
     ssh_client.load_system_host_keys()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     #ssh_client=paramiko.SSHClient(paramiko.AutoAddPolicy())
-    res = ssh_client.connect(hostname, port, username, password)
-    print (res)
-    if res:
+
+    response = {}
+    message = ""
+    try:
+        ssh_client.connect(hostname, port, username, password)
         stdin, stdout, stderr = ssh_client.exec_command(
             'hostname', bufsize=-1, timeout=None, get_pty=False)
-        print (stdin, stdout, stderr)
-        for line in stdout:
-            result = line.strip('\n')
-        print (result)
-        response[1] = f"SSH Success for: {hostname}"
-        response[0] = 0
-        return result
-    else:
-        result = str(SSH_CONN_ERROR)
-        response[2] = f"SSH Failed for: {hostname}"
-        response[0] = 1
+        result = stdout.readlines()
+        # ssh_client.close()
+        logger.debug(f"Response: {result}, Error: {stderr.readlines()}")
+
+        response['ret_code'] = 0
+        response['response'] = stdout
+        response['error_msg'] = stderr
+        response['message'] = result
+    except Exception as exc:
+        message = str(SSH_CONN_EXCEPTION).format(hostname, exc)
+        logger.error(message)
+        response['ret_code'] = 1
+        response['response'] = str(exc)
+        response['error_msg'] = repr(exc)
+        response['message'] = message
+
     ssh_client.close()
-    return  {"ret_code": response[0],
-            "response": response[1],
-            "error_msg": response[2],
-            "message": str(result)}
+    return  response
 
 
 def decrypt_secret(auth_key, secret):

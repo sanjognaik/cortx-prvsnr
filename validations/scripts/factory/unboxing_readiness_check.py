@@ -16,11 +16,8 @@
 #
 
 import logging
-import os
-import sys
 from scripts.utils.cluster import ClusterValidations
 from scripts.utils.pillar_get import PillarGet
-from scripts.utils.bmc import BMCValidations
 from scripts.utils.common import *
 from scripts.utils.network_connectivity_checks import NetworkValidations
 from messages.user_messages import *
@@ -32,8 +29,6 @@ class UnboxingValidationsCall():
         ''' Validations for Pre-Unboxing
         '''
         self.cluster = ClusterValidations()
-        self.bmc = BMCValidations()
-        pass
 
 #    def check_cluster_status(self):
 #        ''' Validations for cluster status
@@ -67,28 +62,13 @@ class UnboxingValidationsCall():
 #        res = self.cluster.stonith_issues()
 #        #if (stop_response[0] and reboot_response[0] and err_response[0]) == 0:
 #        if not res[0]:
-#            response["message"]= str(STONITH_CHECK) 
-#        else: 
+#            response["message"]= str(STONITH_CHECK)
+#        else:
 #            response["message"]= str(STONITH_ERROR)
 #        response["ret_code"]= res[0]
 #        response["response"]= res[1]
 #        response["error_msg"]= res[2]
 #        return response
-
-
-    def check_bmc_accessible(self):
-        ''' Validations for BMC accessibility
-        '''
-        response = {}
-        bmc_res = self.bmc.bmc_accessible()
-        if not bmc_res["ret_code"]:
-            response["message"]= str(BMC_ACCESSIBLE_CHECK)
-        else:
-            response["message"]= str(BMC_ACCESSIBLE_ERROR)
-        response["ret_code"]= bmc_res["ret_code"]
-        response["response"]= bmc_res["response"]
-        response["error_msg"]= bmc_res["error_msg"]
-        return response
 
 
     def check_controller_mc_accessible(self):
