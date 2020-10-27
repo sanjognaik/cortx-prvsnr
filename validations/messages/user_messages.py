@@ -78,5 +78,8 @@ CLUSTER_IP_ERROR = "Cluster IP is Not Set in Pillars"
 # Remote Execution messages
 SSH_CONN_ERROR = "ssh_remote_machine ERROR: SSH Connection Failed to Establish"
 SSH_CONN_EXCEPTION = "ERROR: Exception issuing command on {} -- {}"
+
+# Decrypt password
 DECRYPT_PASSWD_CMD_ERROR = "decrypt_secret ERROR: salt-call: command not found"
-DECRYPT_PASSWD_FAILED = "decrypt_secret ERROR: Failed to decrypt Secret"
+DECRYPT_PASSWD_FAILED = "decrypt_secret ERROR: Failed to decrypt Secret: {}"
+DECRYPT_PASSWD_SUCCESS = "decrypt_secret SUCCESS: Password decrypted successfully."

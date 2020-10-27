@@ -20,6 +20,7 @@ import subprocess
 import paramiko
 import time
 from messages.user_messages import *
+from cortx.utils.security.cipher import Cipher, CipherInvalidToken
 
 logger = logging.getLogger(__name__)
 
@@ -89,32 +90,17 @@ def ssh_remote_machine(hostname, username=None, password=None, port=22):
     return  response
 
 
-def decrypt_secret(auth_key, secret):
-    """Decrypt secret value for User."""
-    # Sample: auth = "ldap"
-    cmd = f"salt-call lyveutil.decrypt {auth_key} {secret}"
-    response = list(run_subprocess_cmd(cmd))
+def decrypt_secret(enc_key, secret):
+    """ Decrypt secret value.
+    """
+    logger.debug("Decrypt secret value.")
+    response = {}
+    try:
+        response['response'] = "{0}".format((Cipher.decrypt(enc_key, secret.encode("utf-8"))).decode("utf-8"))
+        response['message'] = str(DECRYPT_PASSWD_SUCCESS)
+    except CipherInvalidToken:
+        # Already decrypted, nothing to do
+        response['message'] = str(DECRYPT_PASSWD_FAILED).format(secret)
+        response['response'] = secret
 
-    if response[0] == 127:
-        message = str(DECRYPT_PASSWD_CMD_ERROR)
-        logger.error(f"decrypt_secret: {cmd} resulted in {message} ")
-    elif response[0] == 0:
-        res = json.loads(response[1])
-        res = res['local']
-        if not res:
-            message = f"decrypt_secret: Could not decrypt secret data: {secret}"
-            response[2] = f"Could not decrypt secret data: {secret}"
-            response[0] = 1
-            logger.error(f"decrypt_secret: {cmd} resulted in {message} ")
-        else:
-            response[1] = res
-            message = f"decrypt_secret data {res}"
-            logger.debug(f"decrypt_secret: {cmd} resulted in {message} ")
-    else:
-        message = str(DECRYPT_PASSWD_FAILED)
-        logger.error(f"decrypt_secret: {cmd} resulted in {message} ")
-
-    return {"ret_code": response[0],
-            "response": response[1],
-            "error_msg": response[2],
-            "message": message}
+    return response
