@@ -83,3 +83,9 @@ SSH_CONN_EXCEPTION = "ERROR: Exception issuing command on {} -- {}"
 DECRYPT_PASSWD_CMD_ERROR = "decrypt_secret ERROR: salt-call: command not found"
 DECRYPT_PASSWD_FAILED = "decrypt_secret ERROR: Failed to decrypt Secret: {}"
 DECRYPT_PASSWD_SUCCESS = "decrypt_secret SUCCESS: Password decrypted successfully."
+
+# Network Check
+NW_DEVICE_DOES_NOT_EXIST = "ERROR: Device {} does not exist."
+NW_IP_DEV_INVALID_OP = "ERROR: Invalid output. 'inet' is missing"
+NW_IP_FOUND = "CHECK: Network IP '{}' found from device '{}'."
+NW_PUB_DATA_IP_SUCCESS = "CHECK: Public data IP is configured."
